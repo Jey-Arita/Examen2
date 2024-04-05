@@ -68,7 +68,6 @@ function capturarMonto() {
             break;
     
         default:
-            break;
     }
 
     mostraHtml();
