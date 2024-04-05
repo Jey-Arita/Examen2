@@ -4,58 +4,56 @@ const comentario = document.querySelector('.add-comment')
 const contenedorComentarios = document.querySelector('.comments-container');
 
 let like = document.querySelector('.like-count');
-let comentarios = []; 
-
-let sumarlike = 1;
-
+let comentarios = [];
+comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
+let sumarlike = parseInt(localStorage.getItem('like')) || 0;
 
 cargarEventos();
+agregarComentarioHtml();
 
 function cargarEventos() {
+    cargarLikes();
     btnLike.addEventListener('click', incrementarMegusta);
     imagen.addEventListener('dblclick', likeImagen)
     comentario.children[1].addEventListener('click', agregarComentario);
 }
 
-
 function incrementarMegusta() {
     sumarlike =  parseInt(like.textContent);
     
-    if(sumarlike == 0){
-        // Si quiero aumentar mas el boton de me gusta solo con
-        sumarlike = 1;
+    if(btnLike.textContent == 'Me gusta'){
+        sumarlike += 1;
         like.textContent = sumarlike;
-        btnLike.textContent = 'No me gusta'
+        btnLike.textContent = 'No me gusta';
     }else{
-        sumarlike = 0;
+        sumarlike -= 1;
         like.textContent = sumarlike;
-        btnLike.textContent = 'Me gusta'
+        btnLike.textContent = 'Me gusta';
     }
-    
+    localStorage.setItem('like', sumarlike);
 }
 
 function likeImagen() {
     sumarlike =  parseInt(like.textContent);
     
-    if(sumarlike == 0){
-        // Si quiero aumentar mas el boton de me gusta solo con
-        sumarlike = 1;
+    if(btnLike.textContent == 'Me gusta'){
+        sumarlike += 1;
         like.textContent = sumarlike;
         btnLike.textContent = 'No me gusta'
     }else{
-        sumarlike = 0;
+        sumarlike -= 1;
         like.textContent = sumarlike;
         btnLike.textContent = 'Me gusta'
     }
+    localStorage.setItem('like', sumarlike);
 }
 
 function agregarComentario() {
     const agregarComentario = comentario.children[0].value;
-    console.log(agregarComentario);
-    comentarios = [...comentarios, agregarComentario]
+    comentarios = [...comentarios, agregarComentario];
+    localStorage.setItem('comentarios', JSON.stringify(comentarios));
 
     agregarComentarioHtml();
-
 }
 
 function agregarComentarioHtml() {
@@ -77,5 +75,6 @@ function limpiarHtml() {
   comentario.children[0].value = '';
 }
 
-
-
+function cargarLikes() {
+    like.textContent = sumarlike;
+}
